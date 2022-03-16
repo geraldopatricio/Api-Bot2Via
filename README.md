@@ -22,4 +22,4 @@ sudo docker build -t bot-api .
 sudo docker run -p 3000:3000 --env-file .env --name bot-api-container bot-api start
 ```
 ## Endpoint´s Usados nesta API
-<img src=".src/assets/endpoints.JPG">
+<img src="./src/assets/endpoints.JPG">
