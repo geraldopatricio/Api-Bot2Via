@@ -1,5 +1,0 @@
-// para construir imagem
-sudo docker build -t bot-api .
-
-// para criar o container e publicar porta 3000
-sudo docker run -p 3000:3000 --env-file .env --name bot-api-container bot-api start
