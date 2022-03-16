@@ -23,3 +23,6 @@ sudo docker run -p 3000:3000 --env-file .env --name bot-api-container bot-api st
 ```
 ## Endpoint´s Usados nesta API
 <img src="./src/assets/endpoints.JPG">
+
+## Swagger 
+src/swagger.json
