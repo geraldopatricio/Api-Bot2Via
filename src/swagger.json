@@ -1,0 +1,263 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "bot-api",
+        "description": "Api para bot de autoatendimento",
+        "version": "1.0.0"
+    },
+    "tags": [
+        {
+            "name": "Endereco",
+            "description": "Endpoints de Endereco"
+        },
+        {
+            "name": "Cartões",
+            "description": "Operações relacionadas aos cartões do cliente"
+        }
+    ],
+    "paths": {
+        "/address/bycpf/{cpf}":{
+            "get": {
+                "tags": ["Endereco"],
+                "summary": "Buscar endereço do cliente",
+                "description": "Buscar endereco do cliente identificado pelo CPF",
+                "parameters": [{
+                    "name": "cpf",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                        "minimum": 11
+                    },
+                    "description": "CPF do Cliente"
+                }],
+                "responses": {
+                    "201": {
+                        "description": "Endereço encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                  "type":"object",
+                                  "properties": {
+                                      "rua": {"type": "string"},
+                                      "bairro": {"type": "string"},
+                                      "cidade": {"type": "string"},
+                                      "estado": {"type": "string"},
+                                      "pais": {"type": "string"},
+                                      "cep": {"type": "string"},
+                                      "numero": {"type": "number"},
+                                      "complemento": {"type": "string"}
+                                  },
+                                  "example":{
+                                    "rua": "Av. Tambore",
+                                    "bairro": "Alphaville",
+                                    "cidade": "Barueri",
+                                    "estado": "RN",
+                                    "pais": "",
+                                    "cep": "59330000",
+                                    "numero": 267,
+                                    "complemento": "Complemento"
+                                }
+                              }
+                            }
+                        }
+                    },
+                    "404":{
+                        "description": "Endereço não encontrado"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Endereco"],
+                "summary": "Atualizar endereço do cliente",
+                "description": "Atualizar endereco do cliente identificado pelo CPF",
+                "parameters": [{
+                    "name": "cpf",
+                    "in": "path",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                        "minimum": 11
+                    },
+                    "description": "CPF do Cliente"
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type":"object",
+                                "properties": {
+                                    "rua": {"type": "string"},
+                                    "bairro": {"type": "string"},
+                                    "cidade": {"type": "string"},
+                                    "estado": {"type": "string"},
+                                    "pais": {"type": "string"},
+                                    "numero": {"type": "integer"},
+                                    "cep": {"type": "string"},
+                                    "complemento": {"type": "string"}
+                                }
+                            },
+                            "example":{
+                                "rua": "Av. Tambore",
+                                "bairro": "Alphaville",
+                                "cidade": "Barueri",
+                                "estado": "RN",
+                                "pais": "",
+                                "cep": "59330000",
+                                "numero": 267,
+                                "complemento": "Complemento"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Endereço atualizado"
+                    },
+                    "400":{
+                        "description": "Erro ao atualizar endereço"
+                    }
+                }
+            }
+        },
+        "/address": {
+            "get": {
+                "tags": ["Endereco"],
+                "summary": "Pesquisar por um endereço",
+                 "description": "Pesquisar por um endereço usando nome de rua e numéro de casa ou CEP",
+                 "parameters": [
+                     {
+                        "name": "search",
+                        "in": "query",
+                        "required": true,
+                        "description": "Nome de rua acompanhado de um número de casa ou CEP",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "examples": {
+                            "Nome de rua e número de casa": {
+                                "value": "Avenida Paulista 1578"
+                            },
+                            "CEP": {
+                                "value": "01310200"
+                            }
+                        }
+                     }
+                     
+                 ],
+                 "responses": {
+                     "200": {
+                         "description": "Um endereço",
+                          "content": {
+                              "application/json": {
+                                  "schema": {
+                                    "type":"object",
+                                    "properties": {
+                                        "rua": {"type": "string"},
+                                        "bairro": {"type": "string"},
+                                        "cidade": {"type": "string"},
+                                        "estado": {"type": "string"},
+                                        "cep": {"type": "string"}
+                                    },
+                                    "example": {
+                                        "rua": "Avenida Paulista",
+                                        "bairro": "Bela Vista",
+                                        "cidade": "São Paulo",
+                                        "estado": "São Paulo",
+                                        "cep": "01310200"
+                                    }
+                                }
+                              }
+                          }
+                     },
+                     "404": {
+                         "description": "Localidade não encontrada",
+                         "content": {
+                            "application/json": {
+                                "schema": {
+                                  "type":"object",
+                                  "properties": {
+                                      "message": {"type": "string"}
+                                  }
+                              },
+                              "example": {
+                                "message": "Localidade não encontrada"
+                              }
+                            }
+                        }
+                     }
+                 }
+            }
+        },
+        "/cards/{idCartao}/cancel": {
+            "post":{
+                "tags": ["Cartões"],
+                "summary": "Cancelar cartão passando statusCartaoId",
+                "description": "Cancelar cartão passando statusCartaoId. Os seguintes id's podem ser utilizados: 4 para cancelado por perda; 5 para cancelado por roubo; 9 para cancelado danificado; 15 para cancelado desativado",
+                "parameters": [{
+                    "name": "idCartao",
+                    "in": "path",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "description": "identificador único do cartão que será cancelado",
+                    "required": true
+                }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema":{
+                                "type": "object",
+                                "properties": {
+                                    "statusCartaoId": {"type": "integer", "description": "Os seguintes id's podem ser utilizados: 4 para cancelado por perda; 5 para cancelado por roubo; 9 para cancelado danificado; 15 para cancelado desativado"},
+                                    "observacao": {"type": "string"}
+                                },
+                                "required": ["statusCartaoId", "observacao"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cartão Cancelado com sucesso"
+                    },
+                    "201": {
+                        "description": "created"
+                    },
+                    "400": {
+                        "description": "Cartão já se encontra cancelado."
+                        
+                    }
+                }
+            }
+        },
+        "/cards/{idCartao}/reissue": {
+            "post":{
+                "tags": ["Cartões"],
+                "parameters": [{
+                    "name": "idCartao",
+                    "in": "path",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "description": "identificador único do cartão que será reemitdo",
+                    "required": true
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Cartão emitido com sucesso"
+                    },
+                    "400": {
+                        "description": "Problemas ao reemitir cartão"
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+
+
