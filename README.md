@@ -12,6 +12,7 @@
 # API - ChatBot WhatsApp
 API com vários EndPoints a serem usados pela Plataforma ALTU de ChatBot WhatsApp
 
+# Subindo o Projeto via Docker
 ```bash
 
 // para construir imagem
@@ -21,4 +22,4 @@ sudo docker build -t bot-api .
 sudo docker run -p 3000:3000 --env-file .env --name bot-api-container bot-api start
 ```
 ## Endpoint´s Usados nesta API
-<img src=".src/assets/endpoints.jpg">
+<img src=".src/assets/endpoints.JPG">
